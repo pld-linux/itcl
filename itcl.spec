@@ -1,14 +1,18 @@
+%define iwidgets_version 4.0.1
+
 Summary:	[incr Tcl]
 Name:		itcl
 Version:	3.2.1
 Release:	1
 License:	distributable
 Group:		Development/Languages/Tcl
-Source0:	http://dl.sourceforge.net/%{name}/%{name}%{version}_src.tgz
+Source0:	ftp://dl.sourceforge.net/pub/sourceforge/%{name}/%{name}%{version}_src.tgz
+Source1:	ftp://dl.sourceforge.net/pub/sourceforge/%{name}/iwidgets%{iwidgets_version}.tar.gz
 # Source0-md5:	44dcc2129232329cacd6c8abebf38403
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	tcl-devel
+BuildRequires:	tk-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -22,12 +26,17 @@ top of the basic variable/procedure elements, and the resulting code is easier
 to understand and maintain.
 
 %prep
-%setup -qn %{name}%{version}
+%setup -qn %{name}%{version} -a 1
 %patch0 -p1
 
 %build
 %configure2_13
 %{__make}
+
+cd iwidgets%{iwidgets_version}
+%configure2_13
+%{__make}
+cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -35,14 +44,27 @@ install -d $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR="$RPM_BUILD_ROOT"
+cd iwidgets%{iwidgets_version}
+%{__make} install \
+	INSTALL_ROOT="$RPM_BUILD_ROOT" \
+	MAN_INSTALL_DIR="$RPM_BUILD_ROOT/%{_mandir}/mann"
+cd ..
+
+[ -d iwidgets ] || mkdir iwidgets
+cp iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
+
+rm $RPM_BUILD_ROOT%{_libdir}/iwidgets
+ln -sf %{_libdir}/iwidgets%{iwidgets_version} \
+	$RPM_BUILD_ROOT%{_libdir}/iwidgets
 
 rm -f $RPM_BUILD_ROOT%{_includedir}/*
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES ChangeLog INCOMPATIBLE README TODO
+%doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms iwidgets
 %{_libdir}/*
 %{_mandir}/mann/*
