@@ -1,5 +1,14 @@
 --- itcl3.2.1/itcl/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
 +++ itcl3.2.1/itcl/Makefile.in	2003-12-31 18:27:33.782467160 +0100
+@@ -93,7 +93,7 @@
+ # objects and the library itself in a platform-independent manner.
+ #========================================================================
+ 
+-itcl_LIB_FILE = @itcl_LIB_FILE@
++itcl_LIB_FILE = @itcl_LIB_FILE@.0.0
+ @itcl_LIB_FILE@_OBJECTS = $(itcl_OBJECTS)
+ 
+ itclstub_LIB_FILE = @itclstub_LIB_FILE@
 @@ -320,8 +320,8 @@
  
  $(itcl_LIB_FILE): $(itcl_OBJECTS)
@@ -13,6 +22,15 @@
  	-rm -f $(itclstub_LIB_FILE)
 --- itcl3.2.1/itk/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
 +++ itcl3.2.1/itk/Makefile.in	2003-12-31 18:28:13.290461032 +0100
+@@ -80,7 +80,7 @@
+ # objects and the library itself in a platform-independent manner.
+ #========================================================================
+ 
+-itk_LIB_FILE = @itk_LIB_FILE@
++itk_LIB_FILE = @itk_LIB_FILE@.0.0
+ $(itk_LIB_FILE)_OBJECTS = $(itk_OBJECTS)
+ 
+ itkstub_LIB_FILE = @itkstub_LIB_FILE@
 @@ -315,8 +315,8 @@
  
  $(itk_LIB_FILE): $(itk_OBJECTS)
