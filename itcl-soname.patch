@@ -5,8 +5,9 @@
  #========================================================================
  
 -itcl_LIB_FILE = @itcl_LIB_FILE@
+-@itcl_LIB_FILE@_OBJECTS = $(itcl_OBJECTS)
 +itcl_LIB_FILE = @itcl_LIB_FILE@.0.0
- @itcl_LIB_FILE@_OBJECTS = $(itcl_OBJECTS)
++$(itcl_LIB_FILE)_OBJECTS = $(itcl_OBJECTS)
  
  itclstub_LIB_FILE = @itclstub_LIB_FILE@
 @@ -320,8 +320,8 @@
