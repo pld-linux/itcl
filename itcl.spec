@@ -15,6 +15,8 @@ Patch1:		%{name}-soname.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	tcl-devel >= 8.0.3
 BuildRequires:	tk-devel >= 8.0.3
+Requires:	tcl >= 8.0.3
+Requires:	tk >= 8.0.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -44,6 +46,8 @@ Summary:	Header files for itcl/itk libraries
 Summary(pl):	Pliki nag³ówkowe dla itcl/itk libraries
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	tcl-devel >= 8.0.3
+Requires:	tk-devel >= 8.0.3
 
 %description devel
 Header files for itcl/itk libraries.
