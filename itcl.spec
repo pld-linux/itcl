@@ -11,9 +11,10 @@ Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}_src.tgz
 Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 # Source1-md5:	0e9c140e81ea6015b56130127c7deb03
 Patch0:		%{name}-DESTDIR.patch
+Patch1:		%{name}-soname.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
-BuildRequires:	tcl-devel
-BuildRequires:	tk-devel
+BuildRequires:	tcl-devel >= 8.0.3
+BuildRequires:	tk-devel >= 8.0.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -38,9 +39,22 @@ klas. Ten paradygmat orientacji obiektowej dodaje dodatkowy poziom
 zorganizowania do podstawowych elementów zmiennych i procedur, a
 wynikaj±cy z tego kod jest ³atwiejszy do zrozumienia i utrzymania.
 
+%package devel
+Summary:	Header files for itcl/itk libraries
+Summary(pl):	Pliki nag³ówkowe dla itcl/itk libraries
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for itcl/itk libraries.
+
+%description devel -l pl
+Pliki nag³ówkowe dla itcl/itk libraries.
+
 %prep
 %setup -qn %{name}%{version} -a1
 %patch0 -p1
+%patch1 -p1
 
 %build
 %configure2_13
@@ -50,7 +64,6 @@ wynikaj±cy z tego kod jest ³atwiejszy do zrozumienia i utrzymania.
 cd iwidgets%{iwidgets_version}
 %configure2_13
 %{__make}
-cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -59,21 +72,22 @@ install -d $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cd iwidgets%{iwidgets_version}
-%{__make} install \
+%{__make} -C iwidgets%{iwidgets_version} install \
 	INSTALL_ROOT=$RPM_BUILD_ROOT \
 	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
-cd ..
 
 [ -d iwidgets ] || mkdir iwidgets
-cp iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
+cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
 
 rm $RPM_BUILD_ROOT%{_libdir}/iwidgets
 ln -sf %{_libdir}/iwidgets%{iwidgets_version} \
 	$RPM_BUILD_ROOT%{_libdir}/iwidgets
 
-rm -f $RPM_BUILD_ROOT%{_includedir}/*
-rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
+cd $RPM_BUILD_ROOT%{_libdir}
+ln -sf libitcl3.2.so.*.* libitcl3.2.so
+ln -sf libitcl3.2.so.*.* libitcl.so
+ln -sf libitk3.2.so.*.* libitk3.2.so
+ln -sf libitk3.2.so.*.* libitk.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -84,9 +98,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms iwidgets
-# FIXME: missing sonames
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
 %{_libdir}/itcl*
 %{_libdir}/itk*
 %{_libdir}/iwidgets*
 %{_mandir}/mann/*
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/lib*.so
+%{_libdir}/lib*stub*.a
+%{_includedir}/*.h
