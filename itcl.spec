@@ -6,7 +6,7 @@ Version:	3.2.1
 Release:	1
 License:	distributable
 Group:		Development/Languages/Tcl
-Source0:	http://dl.sourceforge.net/incrtcl%{name}/%{name}%{version}_src.tgz
+Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}_src.tgz
 Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 # Source1-md5:	0e9c140e81ea6015b56130127c7deb03
 # Source0-md5:	44dcc2129232329cacd6c8abebf38403
