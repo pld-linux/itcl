@@ -3,7 +3,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jêzyka Tcl
 Name:		itcl
 Version:	3.2.1
-Release:	1
+Release:	2
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}_src.tgz
@@ -12,12 +12,17 @@ Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 # Source1-md5:	0e9c140e81ea6015b56130127c7deb03
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-soname.patch
+Patch2:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
+BuildRequires:	autoconf >= 2.13
+BuildRequires:	automake
 BuildRequires:	tcl-devel >= 8.0.3
 BuildRequires:	tk-devel >= 8.0.3
 Requires:	tcl >= 8.0.3
 Requires:	tk >= 8.0.3
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		_ulibdir	%{_prefix}/lib
 
 %description
 [incr Tcl] provides the extra language support needed to build large
@@ -59,14 +64,23 @@ Pliki nag³ówkowe dla itcl/itk libraries.
 %setup -qn %{name}%{version} -a1
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
-%configure2_13
+cd itcl
+%{__autoconf}
+cd ../itk
+%{__autoconf}
+cd ..
+%{__autoconf}
+cp -f /usr/share/automake/config.* config
+%configure
 %{__make} \
 	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
 cd iwidgets%{iwidgets_version}
-%configure2_13
+%{__autoconf}
+%configure
 %{__make}
 
 %install
@@ -80,12 +94,17 @@ install -d $RPM_BUILD_ROOT
 	INSTALL_ROOT=$RPM_BUILD_ROOT \
 	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 
-[ -d iwidgets ] || mkdir iwidgets
+%if "%{_ulibdir}" != "%{_libdir}"
+mv -f $RPM_BUILD_ROOT%{_libdir}/itcl3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl3.2
+mv -f $RPM_BUILD_ROOT%{_libdir}/itk3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk3.2
+%endif
+
+install -d iwidgets
 cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
 
-rm $RPM_BUILD_ROOT%{_libdir}/iwidgets
-ln -sf %{_libdir}/iwidgets%{iwidgets_version} \
-	$RPM_BUILD_ROOT%{_libdir}/iwidgets
+rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} \
+	$RPM_BUILD_ROOT%{_ulibdir}/iwidgets
 
 cd $RPM_BUILD_ROOT%{_libdir}
 ln -sf libitcl3.2.so.*.* libitcl3.2.so
@@ -103,9 +122,9 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms iwidgets
 %attr(755,root,root) %{_libdir}/lib*.so.*.*
-%{_libdir}/itcl*
-%{_libdir}/itk*
-%{_libdir}/iwidgets*
+%{_ulibdir}/itcl*
+%{_ulibdir}/itk*
+%{_ulibdir}/iwidgets*
 %{_mandir}/mann/*
 
 %files devel
