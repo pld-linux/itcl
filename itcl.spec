@@ -3,7 +3,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jêzyka Tcl
 Name:		itcl
 Version:	3.2.1
-Release:	2
+Release:	3
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}_src.tgz
@@ -16,10 +16,10 @@ Patch2:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
 BuildRequires:	automake
-BuildRequires:	tcl-devel >= 8.0.3
-BuildRequires:	tk-devel >= 8.0.3
-Requires:	tcl >= 8.0.3
-Requires:	tk >= 8.0.3
+BuildRequires:	tcl-devel >= 8.4.6
+BuildRequires:	tk-devel >= 8.4.6
+Requires:	tcl >= 8.4.6
+Requires:	tk >= 8.4.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_ulibdir	%{_prefix}/lib
@@ -51,8 +51,8 @@ Summary:	Header files for itcl/itk libraries
 Summary(pl):	Pliki nag³ówkowe dla itcl/itk libraries
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	tcl-devel >= 8.0.3
-Requires:	tk-devel >= 8.0.3
+Requires:	tcl-devel >= 8.4.6
+Requires:	tk-devel >= 8.4.6
 
 %description devel
 Header files for itcl/itk libraries.
