@@ -1,6 +1,6 @@
 %define	iwidgets_version 4.0.1
-
-Summary:	[incr Tcl]
+Summary:	[incr Tcl] - object-oriented extension of the Tcl language
+Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jêzyka Tcl
 Name:		itcl
 Version:	3.2.1
 Release:	1
@@ -27,13 +27,25 @@ object-oriented paradigm adds another level of organization on top of
 the basic variable/procedure elements, and the resulting code is
 easier to understand and maintain.
 
+%description -l pl
+[incr Tcl] dostarcza dodatkowe wsparcie jêzyka potrzebne przy
+tworzeniu du¿ych aplikacji Tcl/Tk. Wprowadza pojêcie obiektów, które
+s³u¿± jako bloki do budowania aplikacji. Ka¿dy obiekt jest workiem
+danych ze zbiorem procedur lub "metod", które s³u¿± do manipulowania
+tymi danymi. Obiekty s± organizowane w "klasy" o identycznej
+charakterystyce, a klasy mog± dziedziczyæ funkcjonalno¶æ z innych
+klas. Ten paradygmat orientacji obiektowej dodaje dodatkowy poziom
+zorganizowania do podstawowych elementów zmiennych i procedur, a
+wynikaj±cy z tego kod jest ³atwiejszy do zrozumienia i utrzymania.
+
 %prep
-%setup -qn %{name}%{version} -a 1
+%setup -qn %{name}%{version} -a1
 %patch0 -p1
 
 %build
 %configure2_13
-%{__make}
+%{__make} \
+	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
 cd iwidgets%{iwidgets_version}
 %configure2_13
@@ -45,11 +57,12 @@ rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
 
 %{__make} install \
-	DESTDIR="$RPM_BUILD_ROOT"
+	DESTDIR=$RPM_BUILD_ROOT
+
 cd iwidgets%{iwidgets_version}
 %{__make} install \
-	INSTALL_ROOT="$RPM_BUILD_ROOT" \
-	MAN_INSTALL_DIR="$RPM_BUILD_ROOT/%{_mandir}/mann"
+	INSTALL_ROOT=$RPM_BUILD_ROOT \
+	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 cd ..
 
 [ -d iwidgets ] || mkdir iwidgets
@@ -65,8 +78,15 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.a
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms iwidgets
-%{_libdir}/*
+# FIXME: missing sonames
+%attr(755,root,root) %{_libdir}/lib*.so.*.*
+%{_libdir}/itcl*
+%{_libdir}/itk*
+%{_libdir}/iwidgets*
 %{_mandir}/mann/*
