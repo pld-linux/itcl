@@ -5,7 +5,7 @@ Release:	1
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/%{name}/%{name}%{version}_src.tgz
-# Source0-md5:	358bc16e8fd5a335dbf2e855426885d2
+# Source0-md5:	44dcc2129232329cacd6c8abebf38403
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	tcl-devel
