@@ -1,0 +1,146 @@
+diff -durN itcl3.2.1.orig/Makefile.in itcl3.2.1/Makefile.in
+--- itcl3.2.1.orig/Makefile.in	Mon Aug 13 17:57:43 2001
++++ itcl3.2.1/Makefile.in	Thu Sep 25 14:28:16 2003
+@@ -13,6 +13,8 @@
+ # at configure-time with the --exec-prefix and --prefix options
+ # to the "configure" script.
+ 
++DESTDIR=
++
+ prefix =	@prefix@
+ exec_prefix =	@exec_prefix@
+ 
+diff -durN itcl3.2.1.orig/itcl/Makefile.in itcl3.2.1/itcl/Makefile.in
+--- itcl3.2.1.orig/itcl/Makefile.in	Tue May 29 17:51:16 2001
++++ itcl3.2.1/itcl/Makefile.in	Thu Sep 25 14:29:15 2003
+@@ -23,6 +23,8 @@
+ # library that we are building.
+ #========================================================================
+ 
++DESTDIR=
++
+ lib_BINARIES=$(itcl_LIB_FILE) $(itclstub_LIB_FILE)
+ BINARIES=$(lib_BINARIES)
+ 
+@@ -269,16 +271,16 @@
+ #========================================================================
+ 
+ install-libraries: libraries
+-	$(mkinstalldirs) $(includedir)
++	$(mkinstalldirs) $(DESTDIR)$(includedir)
+ 	@echo "Installing header files in $(includedir)"
+ 	@for i in $(GENERIC_HDRS) ; do \
+ 	    echo "Installing $$i" ; \
+-	    $(INSTALL_DATA) $$i $(includedir) ; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(includedir) ; \
+ 	done;
+ 	@echo "Installing library files in $(ITCL_LIBRARY)"
+ 	@for i in $(srcdir)/library/*.tcl ; do \
+ 	    echo "Installing $$i" ; \
+-	    $(INSTALL_DATA) $$i $(ITCL_LIBRARY) ; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(ITCL_LIBRARY) ; \
+ 	done;
+ 
+ #========================================================================
+@@ -287,13 +289,13 @@
+ #========================================================================
+ 
+ install-doc: doc
+-	$(mkinstalldirs) $(mandir)/mann
++	$(mkinstalldirs) $(DESTDIR)$(mandir)/mann
+ 	@echo "Installing man pages in $(mandir)"
+ 	@for i in $(srcdir)/doc/*.n; \
+ 	    do \
+ 	    echo "Installing $$i"; \
+-	    rm -f $(mandir)/mann/`basename $$i`; \
+-	    $(INSTALL_DATA) $$i $(mandir)/mann ; \
++	    rm -f $(DESTDIR)$(mandir)/mann/`basename $$i`; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(mandir)/mann ; \
+ 	    done
+ 
+ test: $(TCLSH_PROG)
+@@ -443,7 +445,7 @@
+ 	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
+ 	  else :; fi; \
+ 	done
+-	$(INSTALL_DATA) pkgIndex.tcl $(pkglibdir)
++	$(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir)
+ 
+ #========================================================================
+ # Install binary executables (e.g. .exe files)
+@@ -481,7 +483,7 @@
+ 	$(mkinstalldirs)  $(DESTDIR)$(libdir)
+ 	$(mkinstalldirs)  $(DESTDIR)$(bindir)
+ 	$(mkinstalldirs)  $(DESTDIR)$(pkglibdir)
+-	$(mkinstalldirs)  $(ITCL_LIBRARY)
++	$(mkinstalldirs)  $(DESTDIR)$(ITCL_LIBRARY)
+ 
+ .PHONY: all binaries clean depend distclean doc install installdirs \
+ libraries test
+diff -durN itcl3.2.1.orig/itk/Makefile.in itcl3.2.1/itk/Makefile.in
+--- itcl3.2.1.orig/itk/Makefile.in	Tue May 29 17:51:16 2001
++++ itcl3.2.1/itk/Makefile.in	Thu Sep 25 14:29:52 2003
+@@ -23,6 +23,8 @@
+ # library that we are building.
+ #========================================================================
+ 
++DESTDIR=
++
+ lib_BINARIES=$(itk_LIB_FILE) $(itkstub_LIB_FILE)
+ BINARIES=$(lib_BINARIES)
+ 
+@@ -264,16 +266,16 @@
+ #========================================================================
+ 
+ install-libraries: libraries
+-	$(mkinstalldirs) $(includedir)
++	$(mkinstalldirs) $(DESTDIR)$(includedir)
+ 	@echo "Installing header files in $(includedir)"
+ 	@for i in $(GENERIC_HDRS) ; do \
+ 	    echo "Installing $$i" ; \
+-	    $(INSTALL_DATA) $$i $(includedir) ; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(includedir) ; \
+ 	done;
+ 	@echo "Installing library files in $(ITK_LIBRARY)"
+ 	@for i in $(srcdir)/library/*.* $(srcdir)/library/tclIndex ; do \
+ 	    echo "Installing $$i" ; \
+-	    $(INSTALL_DATA) $$i $(ITK_LIBRARY) ; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(ITK_LIBRARY) ; \
+ 	done;
+ 
+ #========================================================================
+@@ -282,13 +284,13 @@
+ #========================================================================
+ 
+ install-doc: doc
+-	$(mkinstalldirs) $(mandir)/mann
++	$(mkinstalldirs) $(DESTDIR)$(mandir)/mann
+ 	@echo "Installing man pages in $(mandir)"
+ 	@for i in $(srcdir)/doc/*.n; \
+ 	    do \
+ 	    echo "Installing $$i info $(mandir)/mann"; \
+-	    rm -f $(mandir)/mann/`basename $$i`; \
+-	    $(INSTALL_DATA) $$i $(mandir)/mann ; \
++	    rm -f $(DESTDIR)$(mandir)/mann/`basename $$i`; \
++	    $(INSTALL_DATA) $$i $(DESTDIR)$(mandir)/mann ; \
+ 	    done
+ 
+ test: $(TCLSH_PROG)
+@@ -417,7 +419,7 @@
+ 	    $(RANLIB) $(DESTDIR)$(libdir)/$$p; \
+ 	  else :; fi; \
+ 	done
+-	$(INSTALL_DATA) pkgIndex.tcl $(pkglibdir)
++	$(INSTALL_DATA) pkgIndex.tcl $(DESTDIR)$(pkglibdir)
+ 
+ #========================================================================
+ # Install binary executables (e.g. .exe files)
+@@ -455,7 +457,7 @@
+ 	$(mkinstalldirs)  $(DESTDIR)$(libdir)
+ 	$(mkinstalldirs)  $(DESTDIR)$(bindir)
+ 	$(mkinstalldirs)  $(DESTDIR)$(pkglibdir)
+-	$(mkinstalldirs)  $(ITK_LIBRARY)
++	$(mkinstalldirs)  $(DESTDIR)$(ITK_LIBRARY)
+ 
+ .PHONY: all binaries clean depend distclean doc install installdirs \
+ libraries test
