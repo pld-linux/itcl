@@ -1,4 +1,4 @@
-%define iwidgets_version 4.0.1
+%define	iwidgets_version 4.0.1
 
 Summary:	[incr Tcl]
 Name:		itcl
@@ -17,14 +17,15 @@ BuildRequires:	tk-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-[incr Tcl] provides the extra language support needed to build large Tcl/Tk
-applications. It introduces the notion of objects, which act as building blocks
-for an application. Each object is a bag of data with a set of procedures or
-"methods" that are used to manipulate it. Objects are organized into "classes"
-with identical characteristics, and classes can inherit functionality from one
-another. This object-oriented paradigm adds another level of organization on
-top of the basic variable/procedure elements, and the resulting code is easier
-to understand and maintain.
+[incr Tcl] provides the extra language support needed to build large
+Tcl/Tk applications. It introduces the notion of objects, which act as
+building blocks for an application. Each object is a bag of data with
+a set of procedures or "methods" that are used to manipulate it.
+Objects are organized into "classes" with identical characteristics,
+and classes can inherit functionality from one another. This
+object-oriented paradigm adds another level of organization on top of
+the basic variable/procedure elements, and the resulting code is
+easier to understand and maintain.
 
 %prep
 %setup -qn %{name}%{version} -a 1
