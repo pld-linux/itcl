@@ -2,14 +2,15 @@
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jêzyka Tcl
 Name:		itcl
-Version:	3.2.1
-Release:	3
+Version:	3.3
+Release:	0.1
 License:	distributable
 Group:		Development/Languages/Tcl
-Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}_src.tgz
-# Source0-md5:	44dcc2129232329cacd6c8abebf38403
-Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
-# Source1-md5:	0e9c140e81ea6015b56130127c7deb03
+Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
+# Source0-md5:	d958b3d1c52fa5336b5aacc1251b5ce3
+Source1:	http://dl.sourceforge.net/incrtcl/itk%{version}.tar.gz
+# Source1-md5:	a97c17f3cfa5e377f43073c653c501b5
+Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-soname.patch
 Patch2:		%{name}-libdir.patch
@@ -62,23 +63,23 @@ Pliki nag³ówkowe dla itcl/itk libraries.
 
 %prep
 %setup -qn %{name}%{version} -a1
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+#%patch0 -p1
+#patch1 -p1
+#patch2 -p1
 
 %build
-cd itcl
+#cd itcl
+#{__autoconf}
+#cd ../itk
+#{__autoconf}
+#cd ..
 %{__autoconf}
-cd ../itk
-%{__autoconf}
-cd ..
-%{__autoconf}
-cp -f /usr/share/automake/config.* config
+#cp -f /usr/share/automake/config.* config
 %configure
 %{__make} \
 	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
-cd iwidgets%{iwidgets_version}
+cd itk%{version}
 %{__autoconf}
 %configure
 %{__make}
@@ -90,27 +91,31 @@ install -d $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__make} -C iwidgets%{iwidgets_version} install \
-	INSTALL_ROOT=$RPM_BUILD_ROOT \
-	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
+cd itk%{version}
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 
-%if "%{_ulibdir}" != "%{_libdir}"
-mv -f $RPM_BUILD_ROOT%{_libdir}/itcl3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl3.2
-mv -f $RPM_BUILD_ROOT%{_libdir}/itk3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk3.2
-%endif
+#%{__make} -C iwidgets%{iwidgets_version} install \
+#	INSTALL_ROOT=$RPM_BUILD_ROOT \
+#	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 
-install -d iwidgets
-cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
+#%if "%{_ulibdir}" != "%{_libdir}"
+#mv -f $RPM_BUILD_ROOT%{_libdir}/itcl3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl3.2
+#mv -f $RPM_BUILD_ROOT%{_libdir}/itk3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk3.2
+#%endif
 
-rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
-ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} \
-	$RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+#install -d iwidgets
+#cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
 
-cd $RPM_BUILD_ROOT%{_libdir}
-ln -sf libitcl3.2.so.*.* libitcl3.2.so
-ln -sf libitcl3.2.so.*.* libitcl.so
-ln -sf libitk3.2.so.*.* libitk3.2.so
-ln -sf libitk3.2.so.*.* libitk.so
+#rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+#ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} \
+#	$RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+
+#cd $RPM_BUILD_ROOT%{_libdir}
+#ln -sf libitcl3.2.so.*.* libitcl3.2.so
+#ln -sf libitcl3.2.so.*.* libitcl.so
+#ln -sf libitk3.2.so.*.* libitk3.2.so
+#ln -sf libitk3.2.so.*.* libitk.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
