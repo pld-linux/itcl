@@ -3,7 +3,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jêzyka Tcl
 Name:		itcl
 Version:	3.3
-Release:	0.1
+Release:	0.5
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
@@ -62,7 +62,7 @@ Header files for itcl/itk libraries.
 Pliki nag³ówkowe dla itcl/itk libraries.
 
 %prep
-%setup -qn %{name}%{version} -a1
+%setup -qn %{name}%{version} -a1 -a2
 #%patch0 -p1
 #patch1 -p1
 #patch2 -p1
@@ -84,6 +84,11 @@ cd itk%{version}
 %configure
 %{__make}
 
+#cd ../iwidgets%{iwidgets_version}
+#{__autoconf}
+#configure
+#{__make}
+
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT
@@ -95,7 +100,7 @@ cd itk%{version}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-#%{__make} -C iwidgets%{iwidgets_version} install \
+#{__make} -C iwidgets%{iwidgets_version} install \
 #	INSTALL_ROOT=$RPM_BUILD_ROOT \
 #	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 
@@ -125,15 +130,18 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms iwidgets
-%attr(755,root,root) %{_libdir}/lib*.so.*.*
-%{_ulibdir}/itcl*
-%{_ulibdir}/itk*
-%{_ulibdir}/iwidgets*
+%doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms
+%attr(755,root,root) %{_libdir}/itcl3.3/lib*.so
+%attr(755,root,root) %{_libdir}/itk3.3/lib*.so
+%{_libdir}/itcl*/*
+%{_libdir}/itk*/*
+#{_libdir}/iwidgets*
 %{_mandir}/mann/*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/lib*stub*.a
+%attr(755,root,root) %{_libdir}/*/lib*.so
+%attr(644,root,root) %{_libdir}/*/*.tcl
+%attr(644,root,root) %{_libdir}/itk3.3/*.itk
+#{_libdir}/lib*stub*.a
 %{_includedir}/*.h
