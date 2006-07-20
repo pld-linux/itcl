@@ -10,7 +10,7 @@ Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
 # Source0-md5:	d958b3d1c52fa5336b5aacc1251b5ce3
 Source1:	http://dl.sourceforge.net/incrtcl/itk%{version}.tar.gz
 # Source1-md5:	a97c17f3cfa5e377f43073c653c501b5
-Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
+#Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-soname.patch
 Patch2:		%{name}-libdir.patch
@@ -62,7 +62,7 @@ Header files for itcl/itk libraries.
 Pliki nag³ówkowe dla itcl/itk libraries.
 
 %prep
-%setup -qn %{name}%{version} -a1 -a2
+%setup -qn %{name}%{version} -a1
 #%patch0 -p1
 #patch1 -p1
 #patch2 -p1
