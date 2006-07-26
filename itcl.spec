@@ -141,7 +141,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*/lib*.so
-%attr(644,root,root) %{_libdir}/*/*.tcl
-%attr(644,root,root) %{_libdir}/itk3.3/*.itk
+%{_libdir}/*/*.tcl
+%{_libdir}/itk3.3/*.itk
 #{_libdir}/lib*stub*.a
 %{_includedir}/*.h
