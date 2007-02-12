@@ -1,6 +1,6 @@
 %define	iwidgets_version 4.0.1
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
-Summary(pl):	[incr Tcl] - obiektowo zorientowane rozszerzenie jÍzyka Tcl
+Summary(pl.UTF-8):   [incr Tcl] - obiektowo zorientowane rozszerzenie jƒôzyka Tcl
 Name:		itcl
 Version:	3.3
 Release:	0.5
@@ -36,20 +36,20 @@ object-oriented paradigm adds another level of organization on top of
 the basic variable/procedure elements, and the resulting code is
 easier to understand and maintain.
 
-%description -l pl
-[incr Tcl] dostarcza dodatkowe wsparcie jÍzyka potrzebne przy
-tworzeniu duøych aplikacji Tcl/Tk. Wprowadza pojÍcie obiektÛw, ktÛre
-s≥uø± jako bloki do budowania aplikacji. Kaødy obiekt jest workiem
-danych ze zbiorem procedur lub "metod", ktÛre s≥uø± do manipulowania
-tymi danymi. Obiekty s± organizowane w "klasy" o identycznej
-charakterystyce, a klasy mog± dziedziczyÊ funkcjonalno∂Ê z innych
+%description -l pl.UTF-8
+[incr Tcl] dostarcza dodatkowe wsparcie jƒôzyka potrzebne przy
+tworzeniu du≈ºych aplikacji Tcl/Tk. Wprowadza pojƒôcie obiekt√≥w, kt√≥re
+s≈Çu≈ºƒÖ jako bloki do budowania aplikacji. Ka≈ºdy obiekt jest workiem
+danych ze zbiorem procedur lub "metod", kt√≥re s≈Çu≈ºƒÖ do manipulowania
+tymi danymi. Obiekty sƒÖ organizowane w "klasy" o identycznej
+charakterystyce, a klasy mogƒÖ dziedziczyƒá funkcjonalno≈õƒá z innych
 klas. Ten paradygmat orientacji obiektowej dodaje dodatkowy poziom
-zorganizowania do podstawowych elementÛw zmiennych i procedur, a
-wynikaj±cy z tego kod jest ≥atwiejszy do zrozumienia i utrzymania.
+zorganizowania do podstawowych element√≥w zmiennych i procedur, a
+wynikajƒÖcy z tego kod jest ≈Çatwiejszy do zrozumienia i utrzymania.
 
 %package devel
 Summary:	Header files for itcl/itk libraries
-Summary(pl):	Pliki nag≥Ûwkowe dla itcl/itk libraries
+Summary(pl.UTF-8):   Pliki nag≈Ç√≥wkowe dla itcl/itk libraries
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	tcl-devel >= 8.4.6
@@ -58,8 +58,8 @@ Requires:	tk-devel >= 8.4.6
 %description devel
 Header files for itcl/itk libraries.
 
-%description devel -l pl
-Pliki nag≥Ûwkowe dla itcl/itk libraries.
+%description devel -l pl.UTF-8
+Pliki nag≈Ç√≥wkowe dla itcl/itk libraries.
 
 %prep
 %setup -qn %{name}%{version} -a1
