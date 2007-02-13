@@ -1,6 +1,6 @@
 %define	iwidgets_version 4.0.1
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
-Summary(pl.UTF-8):   [incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
+Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.3
 Release:	0.5
@@ -49,7 +49,7 @@ wynikający z tego kod jest łatwiejszy do zrozumienia i utrzymania.
 
 %package devel
 Summary:	Header files for itcl/itk libraries
-Summary(pl.UTF-8):   Pliki nagłówkowe dla itcl/itk libraries
+Summary(pl.UTF-8):	Pliki nagłówkowe dla itcl/itk libraries
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	tcl-devel >= 8.4.6
