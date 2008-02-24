@@ -3,7 +3,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.3
-Release:	0.5
+Release:	1
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
