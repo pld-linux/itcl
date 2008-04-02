@@ -3,17 +3,17 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.3
-Release:	1
+Release:	1.1
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
 # Source0-md5:	d958b3d1c52fa5336b5aacc1251b5ce3
 Source1:	http://dl.sourceforge.net/incrtcl/itk%{version}.tar.gz
 # Source1-md5:	a97c17f3cfa5e377f43073c653c501b5
-#Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
-Patch0:		%{name}-DESTDIR.patch
-Patch1:		%{name}-soname.patch
-Patch2:		%{name}-libdir.patch
+Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
+# Source2-md5:	0e9c140e81ea6015b56130127c7deb03
+Patch0:		%{name}-iwidgets-config.patch
+#Patch2:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
 BuildRequires:	automake
@@ -62,65 +62,62 @@ Header files for itcl/itk libraries.
 Pliki nagłówkowe dla itcl/itk libraries.
 
 %prep
-%setup -qn %{name}%{version} -a1
-#%patch0 -p1
-#patch1 -p1
-#patch2 -p1
+%setup -q -c -a1 -a2
+%patch0 -p1
+#%patch2 -p1
+
+ln -sf itcl%{version} itcl
+ln -sf itk%{version} itk
 
 %build
-#cd itcl
-#{__autoconf}
-#cd ../itk
-#{__autoconf}
-#cd ..
+cd itcl%{version}
 %{__autoconf}
-#cp -f /usr/share/automake/config.* config
 %configure
+
 %{__make} \
 	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
-cd itk%{version}
+cd ../itk%{version}
+%{__autoconf}
+%configure \
+	--with-itcl=../itcl%{version}
+
+%{__make} \
+	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
+
+cd ../iwidgets%{iwidgets_version}
 %{__autoconf}
 %configure
-%{__make}
-
-#cd ../iwidgets%{iwidgets_version}
-#{__autoconf}
-#configure
-#{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
-%{__make} install \
+%{__make} -C itcl%{version} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-cd itk%{version}
-%{__make} install \
+%{__make} -C itk%{version} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-#{__make} -C iwidgets%{iwidgets_version} install \
-#	INSTALL_ROOT=$RPM_BUILD_ROOT \
-#	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
+%{__make} -C iwidgets%{iwidgets_version} install \
+	INSTALL="install" \
+	MKINSTALLDIRS="install -d" \
+	INSTALL_ROOT=$RPM_BUILD_ROOT \
+	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 
 #%if "%{_ulibdir}" != "%{_libdir}"
-#mv -f $RPM_BUILD_ROOT%{_libdir}/itcl3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl3.2
-#mv -f $RPM_BUILD_ROOT%{_libdir}/itk3.2/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk3.2
+#mv -f $RPM_BUILD_ROOT%{_libdir}/itcl%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}
+#mv -f $RPM_BUILD_ROOT%{_libdir}/itk%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk%{version}
 #%endif
 
-#install -d iwidgets
-#cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
+install -d iwidgets
+cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
 
-#rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
-#ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} \
-#	$RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
+ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
 
-#cd $RPM_BUILD_ROOT%{_libdir}
-#ln -sf libitcl3.2.so.*.* libitcl3.2.so
-#ln -sf libitcl3.2.so.*.* libitcl.so
-#ln -sf libitk3.2.so.*.* libitk3.2.so
-#ln -sf libitk3.2.so.*.* libitk.so
+mv $RPM_BUILD_ROOT%{_ulibdir}/iwidgets%{iwidgets_version}/demos/* \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -130,19 +127,22 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES ChangeLog INCOMPATIBLE README TODO license.terms
-%attr(755,root,root) %{_libdir}/itcl3.3/lib*.so
-%attr(755,root,root) %{_libdir}/itk3.3/lib*.so
-%{_libdir}/itcl*/*
+%doc itcl*/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets
+%attr(755,root,root) %{_libdir}/itcl*/lib*.so
+%attr(755,root,root) %{_libdir}/itk*/lib*.so
+%{_libdir}/iwidgets
+%dir %{_libdir}/itcl*
+%dir %{_libdir}/itk*
+%dir %{_libdir}/iwidgets%{iwidgets_version}
+%{_libdir}/iwidgets%{iwidgets_version}/*.tcl
+%{_libdir}/iwidgets%{iwidgets_version}/scripts
+%{_libdir}/itcl*/*.tcl
 %{_libdir}/itk*/*
-#{_libdir}/iwidgets*
 %{_mandir}/mann/*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/*/lib*.so
 %{_libdir}/itclConfig.sh
-%{_libdir}/*/*.tcl
-%{_libdir}/itk3.3/*.itk
-#{_libdir}/lib*stub*.a
+%{_libdir}/itcl*/lib*stub*.a
 %{_includedir}/*.h
+%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
