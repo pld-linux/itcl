@@ -3,7 +3,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.3
-Release:	1.1
+Release:	2
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
@@ -13,6 +13,7 @@ Source1:	http://dl.sourceforge.net/incrtcl/itk%{version}.tar.gz
 Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 # Source2-md5:	0e9c140e81ea6015b56130127c7deb03
 Patch0:		%{name}-iwidgets-config.patch
+Patch1:		%{name}-soname.patch
 #Patch2:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
@@ -64,6 +65,7 @@ Pliki nagłówkowe dla itcl/itk libraries.
 %prep
 %setup -q -c -a1 -a2
 %patch0 -p1
+%patch1 -p1
 #%patch2 -p1
 
 ln -sf itcl%{version} itcl
@@ -119,6 +121,15 @@ ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} $RPM_BUILD_ROOT%{_ulibdir}/iwidge
 mv $RPM_BUILD_ROOT%{_ulibdir}/iwidgets%{iwidgets_version}/demos/* \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
+mv -f $RPM_BUILD_ROOT%{_libdir}/itcl%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_libdir}/itk%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
+
+cd $RPM_BUILD_ROOT%{_libdir}
+ln -sf libitcl*.so.* libitcl%{version}.so
+ln -sf libitcl*.so.* libitcl.so
+ln -sf libitk*.so.* libitk%{version}.so
+ln -sf libitk*.so.* libitk.so
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -127,9 +138,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc itcl*/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets
-%attr(755,root,root) %{_libdir}/itcl*/lib*.so
-%attr(755,root,root) %{_libdir}/itk*/lib*.so
+%doc itcl%{version}/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets
+%attr(755,root,root) %{_libdir}/lib*.so.*
 %{_libdir}/iwidgets
 %dir %{_libdir}/itcl*
 %dir %{_libdir}/itk*
@@ -143,6 +153,7 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %{_libdir}/itclConfig.sh
+%attr(755,root,root) %{_libdir}/lib*.so
 %{_libdir}/itcl*/lib*stub*.a
 %{_includedir}/*.h
 %{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
