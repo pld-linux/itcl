@@ -23,14 +23,14 @@
 --- itcl3.2.1/itk3.3/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
 +++ itcl3.2.1/itk3.3/Makefile.in	2003-12-31 18:28:13.290461032 +0100
 @@ -80,7 +80,7 @@
- # are correct.
+ # library that we are building.
  #========================================================================
  
--itk_LIB_FILE	= @itk_LIB_FILE@
-+itk_LIB_FILE	= @itk_LIB_FILE@.0.0
- itkstub_LIB_FILE = @itkstub_LIB_FILE@
- itclstub_LIB_FILE = @itclstub_LIB_FILE@
+-PKG_LIB_FILE	= @PKG_LIB_FILE@
++PKG_LIB_FILE	= @PKG_LIB_FILE@.0.0
+ PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
  
+ lib_BINARIES	= $(PKG_LIB_FILE)
 @@ -315,8 +315,8 @@
  
  $(PKG_LIB_FILE): $(PKG_OBJECTS)
@@ -38,7 +38,22 @@
 -	${MAKE_LIB}
 -	$(RANLIB) $(PKG_LIB_FILE)
 +	${MAKE_LIB} -Wl,-soname,libitk$(VERSION).so.0
-+	-ln -sf $(PKG_LIB_FILE) libitk$(VERSION).so
++	-ln -sf $(PKG_LIB_FILE) libitk$(VERSION).so.0
  
  $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
  	-rm -f $(PKG_STUB_LIB_FILE)
+--- itcl-3.3/itcl3.3/configure.in~	2005-03-25 20:37:41.000000000 +0100
++++ itcl-3.3/itcl3.3/configure.in	2008-04-02 18:30:48.000000000 +0200
+@@ -220,10 +220,10 @@
+     eval itcl_STUB_LIB_FLAG="-litclstub`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
+ fi
+ itcl_BUILD_LIB_SPEC="-L`pwd` ${itcl_LIB_FLAG}"
+-itcl_LIB_SPEC="-L${pkglibdir} ${itcl_LIB_FLAG}"
++itcl_LIB_SPEC="-L${libdir} ${itcl_LIB_FLAG}"
+ 
+ itcl_BUILD_STUB_LIB_SPEC="-L`pwd` ${itcl_STUB_LIB_FLAG}"
+-itcl_STUB_LIB_SPEC="-L${pkglibdir} ${itcl_STUB_LIB_FLAG}"
++itcl_STUB_LIB_SPEC="-L${libdir} ${itcl_STUB_LIB_FLAG}"
+ itcl_BUILD_STUB_LIB_PATH="`pwd`/${itcl_STUB_LIB_FILE}"
+ itcl_STUB_LIB_PATH="${pkglibdir}/${itcl_STUB_LIB_FILE}"
+ 
