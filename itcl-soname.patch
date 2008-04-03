@@ -1,5 +1,5 @@
---- itcl3.2.1/itcl3.3/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
-+++ itcl3.2.1/itcl3.3/Makefile.in	2003-12-31 18:27:33.782467160 +0100
+--- incrTcl/itcl/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
++++ incrTcl/itcl/Makefile.in	2003-12-31 18:27:33.782467160 +0100
 @@ -55,7 +55,7 @@
  # library that we are building.
  #========================================================================
@@ -20,8 +20,8 @@
  
  $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
  	-rm -f $(PKG_STUB_LIB_FILE)
---- itcl3.2.1/itk3.3/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
-+++ itcl3.2.1/itk3.3/Makefile.in	2003-12-31 18:28:13.290461032 +0100
+--- incrTcl/itk/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
++++ incrTcl/itk/Makefile.in	2003-12-31 18:28:13.290461032 +0100
 @@ -80,7 +80,7 @@
  # library that we are building.
  #========================================================================
@@ -42,8 +42,8 @@
  
  $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
  	-rm -f $(PKG_STUB_LIB_FILE)
---- itcl-3.3/itcl3.3/configure.in~	2005-03-25 20:37:41.000000000 +0100
-+++ itcl-3.3/itcl3.3/configure.in	2008-04-02 18:30:48.000000000 +0200
+--- incrTcl/itcl/configure.in~	2005-03-25 20:37:41.000000000 +0100
++++ incrTcl/itcl/configure.in	2008-04-02 18:30:48.000000000 +0200
 @@ -220,10 +220,10 @@
      eval itcl_STUB_LIB_FLAG="-litclstub`echo ${PACKAGE_VERSION} | tr -d .`${DBGX}"
  fi
