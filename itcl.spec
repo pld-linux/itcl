@@ -7,7 +7,7 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.4
-Release:	0.%{_snap}.1
+Release:	0.%{_snap}.2
 License:	distributable
 Group:		Development/Languages/Tcl
 #Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
@@ -87,7 +87,8 @@ cd ../iwidgets
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
+install -d $RPM_BUILD_ROOT%{_libdir} \
+	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
 %{__make} -C incrTcl install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -103,8 +104,8 @@ ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} $RPM_BUILD_ROOT%{_ulibdir}/iwidge
 mv $RPM_BUILD_ROOT%{_ulibdir}/iwidgets%{iwidgets_version}/demos/* \
 	$RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
-mv -f $RPM_BUILD_ROOT%{_libdir}/itcl%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
-mv -f $RPM_BUILD_ROOT%{_libdir}/itk%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
+mv -f $RPM_BUILD_ROOT%{_ulibdir}/itk%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
 
 cd $RPM_BUILD_ROOT%{_libdir}
 ln -sf libitcl*.so.* libitcl%{version}.so
@@ -122,20 +123,20 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc incrTcl/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets-docs
 %attr(755,root,root) %{_libdir}/lib*.so.*
-%{_libdir}/iwidgets
-%dir %{_libdir}/itcl*
-%dir %{_libdir}/itk*
-%dir %{_libdir}/iwidgets%{iwidgets_version}
-%{_libdir}/iwidgets%{iwidgets_version}/*.tcl
-%{_libdir}/iwidgets%{iwidgets_version}/scripts
-%{_libdir}/itcl*/*.tcl
-%{_libdir}/itk*/*
+%{_ulibdir}/iwidgets
+%dir %{_ulibdir}/itcl*
+%dir %{_ulibdir}/itk*
+%dir %{_ulibdir}/iwidgets%{iwidgets_version}
+%{_ulibdir}/iwidgets%{iwidgets_version}/*.tcl
+%{_ulibdir}/iwidgets%{iwidgets_version}/scripts
+%{_ulibdir}/itcl*/*.tcl
+%{_ulibdir}/itk*/*
 %{_mandir}/mann/*
 
 %files devel
 %defattr(644,root,root,755)
-%{_libdir}/itclConfig.sh
+%{_ulibdir}/itclConfig.sh
 %attr(755,root,root) %{_libdir}/lib*.so
-%{_libdir}/itcl*/lib*stub*.a
+%{_ulibdir}/itcl*/lib*stub*.a
 %{_includedir}/*.h
 %{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
