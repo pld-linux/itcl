@@ -1,17 +1,21 @@
+
 %define	iwidgets_version 4.0.1
+
+%define _snap	20080403
+
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 Version:	3.3
-Release:	2
+Release:	2.%{_snap}.0.1
 License:	distributable
 Group:		Development/Languages/Tcl
-Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
-# Source0-md5:	d958b3d1c52fa5336b5aacc1251b5ce3
-Source1:	http://dl.sourceforge.net/incrtcl/itk%{version}.tar.gz
-# Source1-md5:	a97c17f3cfa5e377f43073c653c501b5
-Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
-# Source2-md5:	0e9c140e81ea6015b56130127c7deb03
+#Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
+Source0:	%{name}-CVS-%{_snap}.tar.bz2
+# Source0-md5:	8ac37bc9a01b25253e193e8b6a53a98d
+#Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
+Source2:	iwidgets-CVS-%{_snap}.tar.bz2
+# Source2-md5:	7741d7e0b231a4875b0998d6b5c00615
 Patch0:		%{name}-iwidgets-config.patch
 Patch1:		%{name}-soname.patch
 #Patch2:		%{name}-libdir.patch
@@ -63,31 +67,20 @@ Header files for itcl/itk libraries.
 Pliki nagłówkowe dla itcl/itk libraries.
 
 %prep
-%setup -q -c -a1 -a2
+%setup -q -c -a1
 %patch0 -p1
 %patch1 -p1
 #%patch2 -p1
 
-ln -sf itcl%{version} itcl
-ln -sf itk%{version} itk
-
 %build
-cd itcl%{version}
+cd itcl
 %{__autoconf}
 %configure
 
 %{__make} \
 	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
-cd ../itk%{version}
-%{__autoconf}
-%configure \
-	--with-itcl=../itcl%{version}
-
-%{__make} \
-	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
-
-cd ../iwidgets%{iwidgets_version}
+cd ../iwidgets
 %{__autoconf}
 %configure
 
