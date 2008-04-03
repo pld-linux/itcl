@@ -1,13 +1,13 @@
 
-%define	iwidgets_version 4.0.1
+%define	iwidgets_version 4.0.2
 
 %define _snap	20080403
 
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
-Version:	3.3
-Release:	2.%{_snap}.0.1
+Version:	3.4
+Release:	0.%{_snap}.1
 License:	distributable
 Group:		Development/Languages/Tcl
 #Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
@@ -16,9 +16,8 @@ Source0:	%{name}-CVS-%{_snap}.tar.bz2
 #Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
 Source1:	iwidgets-CVS-%{_snap}.tar.bz2
 # Source1-md5:	7741d7e0b231a4875b0998d6b5c00615
-Patch0:		%{name}-iwidgets-config.patch
-Patch1:		%{name}-soname.patch
-#Patch2:		%{name}-libdir.patch
+Patch0:		%{name}-soname.patch
+#Patch1:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
 BuildRequires:	automake
@@ -68,12 +67,14 @@ Pliki nagłówkowe dla itcl/itk libraries.
 
 %prep
 %setup -q -c -a1
-%patch0 -p1
-%patch1 -p1
-#%patch2 -p1
+%patch0 -p0
+#%patch1 -p1
+
+ln -s incrTcl/itcl itcl
+ln -s incrTcl/itk itk
 
 %build
-cd itcl
+cd incrTcl
 %{__autoconf}
 %configure
 
@@ -88,27 +89,20 @@ cd ../iwidgets
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
-%{__make} -C itcl%{version} install \
+%{__make} -C incrTcl install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__make} -C itk%{version} install \
+%{__make} -C iwidgets install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-%{__make} -C iwidgets%{iwidgets_version} install \
-	INSTALL="install" \
-	MKINSTALLDIRS="install -d" \
-	INSTALL_ROOT=$RPM_BUILD_ROOT \
-	MAN_INSTALL_DIR=$RPM_BUILD_ROOT%{_mandir}/mann
 
 #%if "%{_ulibdir}" != "%{_libdir}"
 #mv -f $RPM_BUILD_ROOT%{_libdir}/itcl%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}
 #mv -f $RPM_BUILD_ROOT%{_libdir}/itk%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk%{version}
 #%endif
 
-install -d iwidgets
-cp -f iwidgets%{iwidgets_version}/{CHANGES,ChangeLog,README,license.terms} iwidgets
+install -d iwidgets-docs
+cp -f iwidgets/{CHANGES,ChangeLog,README,license.terms} iwidgets-docs
 
-rm $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
 ln -sf %{_ulibdir}/iwidgets%{iwidgets_version} $RPM_BUILD_ROOT%{_ulibdir}/iwidgets
 
 mv $RPM_BUILD_ROOT%{_ulibdir}/iwidgets%{iwidgets_version}/demos/* \
@@ -131,7 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc itcl%{version}/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets
+%doc incrTcl/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets-docs
 %attr(755,root,root) %{_libdir}/lib*.so.*
 %{_libdir}/iwidgets
 %dir %{_libdir}/itcl*
