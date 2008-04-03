@@ -17,7 +17,6 @@ Source0:	%{name}-CVS-%{_snap}.tar.bz2
 Source1:	iwidgets-CVS-%{_snap}.tar.bz2
 # Source1-md5:	7741d7e0b231a4875b0998d6b5c00615
 Patch0:		%{name}-soname.patch
-#Patch1:		%{name}-libdir.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
 BuildRequires:	automake
@@ -68,7 +67,6 @@ Pliki nagłówkowe dla itcl/itk libraries.
 %prep
 %setup -q -c -a1
 %patch0 -p0
-#%patch1 -p1
 
 ln -s incrTcl/itcl itcl
 ln -s incrTcl/itk itk
@@ -76,14 +74,16 @@ ln -s incrTcl/itk itk
 %build
 cd incrTcl
 %{__autoconf}
-%configure
+%configure \
+	--libdir=%{_ulibdir}
 
 %{__make} \
 	CFLAGS_DEFAULT="%{rpmcflags} -D__NO_STRING_INLINES -D__NO_MATH_INLINES"
 
 cd ../iwidgets
 %{__autoconf}
-%configure
+%configure \
+	--libdir=%{_ulibdir}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -94,11 +94,6 @@ install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
 
 %{__make} -C iwidgets install \
 	DESTDIR=$RPM_BUILD_ROOT
-
-#%if "%{_ulibdir}" != "%{_libdir}"
-#mv -f $RPM_BUILD_ROOT%{_libdir}/itcl%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}
-#mv -f $RPM_BUILD_ROOT%{_libdir}/itk%{version}/pkgIndex.tcl $RPM_BUILD_ROOT%{_ulibdir}/itk%{version}
-#%endif
 
 install -d iwidgets-docs
 cp -f iwidgets/{CHANGES,ChangeLog,README,license.terms} iwidgets-docs
