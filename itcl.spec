@@ -13,9 +13,9 @@ Group:		Development/Languages/Tcl
 #Source0:	http://dl.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
 Source0:	%{name}-CVS-%{_snap}.tar.bz2
 # Source0-md5:	8ac37bc9a01b25253e193e8b6a53a98d
-#Source2:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
-Source2:	iwidgets-CVS-%{_snap}.tar.bz2
-# Source2-md5:	7741d7e0b231a4875b0998d6b5c00615
+#Source1:	http://dl.sourceforge.net/incrtcl/iwidgets%{iwidgets_version}.tar.gz
+Source1:	iwidgets-CVS-%{_snap}.tar.bz2
+# Source1-md5:	7741d7e0b231a4875b0998d6b5c00615
 Patch0:		%{name}-iwidgets-config.patch
 Patch1:		%{name}-soname.patch
 #Patch2:		%{name}-libdir.patch
