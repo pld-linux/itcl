@@ -1,3 +1,4 @@
+# TODO: lib*stub*.a should exist in %{_libdir} not %{_ulibdir}
 
 %define	iwidgets_version 4.0.2
 
