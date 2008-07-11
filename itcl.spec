@@ -1,4 +1,4 @@
-# TODO: lib*stub*.a should exist in %{_libdir} not %{_ulibdir}
+# TODO: libitclstub*.a should exist in %{_libdir} not %{_ulibdir}
 
 %define	iwidgets_version 4.0.2
 
@@ -109,10 +109,12 @@ mv -f $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdi
 mv -f $RPM_BUILD_ROOT%{_ulibdir}/itk%{version}/lib*.so* $RPM_BUILD_ROOT%{_libdir}
 
 cd $RPM_BUILD_ROOT%{_libdir}
-ln -sf libitcl*.so.* libitcl%{version}.so
-ln -sf libitcl*.so.* libitcl.so
-ln -sf libitk*.so.* libitk%{version}.so
-ln -sf libitk*.so.* libitk.so
+ln -sf libitcl*.so.*.* libitcl%{version}.so.0
+ln -sf libitcl*.so.*.* libitcl%{version}.so
+ln -sf libitcl*.so.*.* libitcl.so
+ln -sf libitk*.so.*.* libitk%{version}.so.0
+ln -sf libitk*.so.*.* libitk%{version}.so
+ln -sf libitk*.so.*.* libitk.so
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -123,21 +125,30 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc incrTcl/{CHANGES,ChangeLog,INCOMPATIBLE,README,TODO,license.terms} iwidgets-docs
-%attr(755,root,root) %{_libdir}/lib*.so.*
+%attr(755,root,root) %{_libdir}/libitcl%{version}.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libitcl%{version}.so.0
+%attr(755,root,root) %{_libdir}/libitk%{version}.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libitk%{version}.so.0
+%dir %{_ulibdir}/itcl%{version}
+%{_ulibdir}/itcl%{version}/*.tcl
+%dir %{_ulibdir}/itk%{version}
+%{_ulibdir}/itk%{version}/*.itk
+%{_ulibdir}/itk%{version}/*.tcl
+%{_ulibdir}/itk%{version}/tclIndex
 %{_ulibdir}/iwidgets
-%dir %{_ulibdir}/itcl*
-%dir %{_ulibdir}/itk*
 %dir %{_ulibdir}/iwidgets%{iwidgets_version}
 %{_ulibdir}/iwidgets%{iwidgets_version}/*.tcl
 %{_ulibdir}/iwidgets%{iwidgets_version}/scripts
-%{_ulibdir}/itcl*/*.tcl
-%{_ulibdir}/itk*/*
-%{_mandir}/mann/*
+%{_mandir}/mann/*.n*
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libitcl%{version}.so
+%attr(755,root,root) %{_libdir}/libitcl.so
+%attr(755,root,root) %{_libdir}/libitk%{version}.so
+%attr(755,root,root) %{_libdir}/libitk.so
 %{_ulibdir}/itclConfig.sh
-%attr(755,root,root) %{_libdir}/lib*.so
-%{_ulibdir}/itcl*/lib*stub*.a
-%{_includedir}/*.h
+%{_ulibdir}/itcl%{version}/libitclstub%{version}.a
+%{_includedir}/itcl*.h
+%{_includedir}/itk*.h
 %{_examplesdir}/%{name}-iwidgets-%{iwidgets_version}
