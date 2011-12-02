@@ -84,6 +84,8 @@ ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl.so
 	-e 's#%{_ulibdir}/itcl%{vermajor}/lib#%{_libdir}/lib#' \
 	$RPM_BUILD_ROOT%{_ulibdir}/itclConfig.sh
 
+%{__sed} -i -e 's#%{_ulibdir}#%{_libdir}#' $RPM_BUILD_ROOT%{_ulibdir}/itcl%{vermaj}/pkgIndex.tcl
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
