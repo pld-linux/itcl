@@ -3,7 +3,7 @@ Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 %define	vermaj	3.4
 Version:	%{vermaj}.1
-Release:	1
+Release:	2
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
