@@ -20,11 +20,11 @@
  
  $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
  	-rm -f $(PKG_STUB_LIB_FILE)
---- itcl3.4.1/pkgIndex.tcl.in.orig	2011-07-15 18:34:43.000000000 +0200
-+++ itcl3.4.1/pkgIndex.tcl.in	2011-12-02 17:07:08.483164656 +0100
+--- itcl3.4.2/pkgIndex.tcl.in.orig	2011-07-15 18:34:43.000000000 +0200
++++ itcl3.4.2/pkgIndex.tcl.in	2011-12-02 17:07:08.483164656 +0100
 @@ -1,4 +1,4 @@
  # Tcl package index file, version 1.0
  
- if {![package vsatisfies [package present Tcl] @TCL_VERSION@]} {return}
+ if {![package vsatisfies [package provide Tcl] @TCL_VERSION@]} {return}
 -package ifneeded Itcl @PACKAGE_VERSION@ [list load [file join $dir "@PKG_LIB_FILE@"] Itcl]
 +package ifneeded Itcl @PACKAGE_VERSION@ [list load "@libdir@/@PKG_LIB_FILE@.0" Itcl]
