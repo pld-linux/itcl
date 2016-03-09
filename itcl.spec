@@ -2,12 +2,12 @@ Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
 %define	vermaj	3.4
-Version:	%{vermaj}.2
+Version:	%{vermaj}.3
 Release:	1
 License:	distributable
 Group:		Development/Languages/Tcl
 Source0:	http://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
-# Source0-md5:	3d8e97ab1a9f1910d3f405aa132153ae
+# Source0-md5:	bea70fc6e6a3fb049fdada405161b934
 Patch0:		%{name}-soname.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
@@ -72,7 +72,7 @@ install -d $RPM_BUILD_ROOT%{_libdir}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-mv -f $RPM_BUILD_ROOT%{_ulibdir}/itcl%{vermaj}/libitcl* $RPM_BUILD_ROOT%{_libdir}
+%{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{vermaj}/libitcl* $RPM_BUILD_ROOT%{_libdir}
 
 libfile=$(basename $RPM_BUILD_ROOT%{_libdir}/libitcl%{vermaj}.so.0.*)
 ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{vermaj}.so.0
