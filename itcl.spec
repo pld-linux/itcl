@@ -4,7 +4,7 @@ Name:		itcl
 %define	vermaj	3.4
 Version:	%{vermaj}.3
 Release:	1
-License:	distributable
+License:	Tcl (BSD-like)
 Group:		Development/Languages/Tcl
 Source0:	http://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
 # Source0-md5:	bea70fc6e6a3fb049fdada405161b934
@@ -94,6 +94,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc license.terms
 %attr(755,root,root) %{_libdir}/libitcl%{vermaj}.so.*.*
 %attr(755,root,root) %ghost %{_libdir}/libitcl%{vermaj}.so.0
 %dir %{_ulibdir}/itcl%{vermaj}
