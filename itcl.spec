@@ -1,19 +1,18 @@
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
-%define	vermaj	3.4
-Version:	%{vermaj}.3
+Version:	4.0.4
 Release:	1
 License:	Tcl (BSD-like)
 Group:		Development/Languages/Tcl
 Source0:	http://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
-# Source0-md5:	bea70fc6e6a3fb049fdada405161b934
+# Source0-md5:	c9c52afdd9435490e2db17c3c6c95ab4
 Patch0:		%{name}-soname.patch
 URL:		http://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.13
 BuildRequires:	automake
-BuildRequires:	tcl-devel >= 8.4.6
-Requires:	tcl >= 8.4.6
+BuildRequires:	tcl-devel >= 8.6
+Requires:	tcl >= 8.6
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_ulibdir	%{_prefix}/lib
@@ -45,7 +44,7 @@ Summary:	Header files for itcl library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki itcl
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	tcl-devel >= 8.4.6
+Requires:	tcl-devel >= 8.6
 
 %description devel
 Header files for itcl library.
@@ -72,19 +71,26 @@ install -d $RPM_BUILD_ROOT%{_libdir}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-%{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{vermaj}/libitcl* $RPM_BUILD_ROOT%{_libdir}
-
-libfile=$(basename $RPM_BUILD_ROOT%{_libdir}/libitcl%{vermaj}.so.0.*)
-ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{vermaj}.so.0
-ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{vermaj}.so
+%{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/libitcl* $RPM_BUILD_ROOT%{_libdir}
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/libitcl*.so.0.*
+libfile=$(basename $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so.0.*)
+ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so.0
+ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so
 ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl.so
 
-%{__sed} -i -e 's#-L[^ ]* ##' \
+%{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/itclConfig.sh $RPM_BUILD_ROOT%{_ulibdir}
+%{__sed} -e 's#-L[^ ]* ##' \
 	-e 's#%{_builddir}/%{name}%{version}#%{_libdir}#' \
-	-e 's#%{_ulibdir}/itcl%{vermajor}/lib#%{_libdir}/lib#' \
-	$RPM_BUILD_ROOT%{_ulibdir}/itclConfig.sh
+	-e 's#%{_libdir}/generic#%{_includedir}#' \
+	-e 's#%{_ulibdir}/itcl%{version}/lib#%{_libdir}/lib#' \
+	-i $RPM_BUILD_ROOT%{_ulibdir}/itclConfig.sh
 
-%{__sed} -i -e 's#%{_ulibdir}#%{_libdir}#' $RPM_BUILD_ROOT%{_ulibdir}/itcl%{vermaj}/pkgIndex.tcl
+%{__sed} -i -e 's#%{_ulibdir}#%{_libdir}#' $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/pkgIndex.tcl
+
+install -d $RPM_BUILD_ROOT%{_mandir}/man3
+for f in doc/*.3 ; do
+	%{__sed} -e '/man\.macros/r doc/man.macros' -e '/man\.macros/d' $f >$RPM_BUILD_ROOT%{_mandir}/man3/Itcl_$(basename $f)
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -95,10 +101,10 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc license.terms
-%attr(755,root,root) %{_libdir}/libitcl%{vermaj}.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libitcl%{vermaj}.so.0
-%dir %{_ulibdir}/itcl%{vermaj}
-%{_ulibdir}/itcl%{vermaj}/*.tcl
+%attr(755,root,root) %{_libdir}/libitcl%{version}.so.*.*
+%attr(755,root,root) %ghost %{_libdir}/libitcl%{version}.so.0
+%dir %{_ulibdir}/itcl%{version}
+%{_ulibdir}/itcl%{version}/*.tcl
 %{_mandir}/mann/body.n*
 %{_mandir}/mann/class.n*
 %{_mandir}/mann/code.n*
@@ -107,15 +113,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/mann/ensemble.n*
 %{_mandir}/mann/find.n*
 %{_mandir}/mann/is.n*
-%{_mandir}/mann/itcl.n*
-%{_mandir}/mann/itclvars.n*
+%{_mandir}/mann/itcl*.n*
 %{_mandir}/mann/local.n*
 %{_mandir}/mann/scope.n*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libitcl%{vermaj}.so
+%attr(755,root,root) %{_libdir}/libitcl%{version}.so
 %attr(755,root,root) %{_libdir}/libitcl.so
-%{_libdir}/libitclstub%{vermaj}.a
+%{_libdir}/libitclstub%{version}.a
 %{_ulibdir}/itclConfig.sh
 %{_includedir}/itcl*.h
+%{_mandir}/man3/Itcl_*.3*
