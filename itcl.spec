@@ -1,14 +1,14 @@
 Summary:	[incr Tcl] - object-oriented extension of the Tcl language
 Summary(pl.UTF-8):	[incr Tcl] - obiektowo zorientowane rozszerzenie języka Tcl
 Name:		itcl
-Version:	4.2.0
+Version:	4.2.3
 Release:	1
 License:	Tcl (BSD-like)
 Group:		Development/Languages/Tcl
-Source0:	http://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
-# Source0-md5:	324e89a088549cd268b0311abba70745
+Source0:	https://downloads.sourceforge.net/incrtcl/%{name}%{version}.tar.gz
+# Source0-md5:	828fdaee6d394eff6a3a69ae096e9420
 Patch0:		%{name}-soname.patch
-URL:		http://incrtcl.sourceforge.net/itcl/
+URL:		https://incrtcl.sourceforge.net/itcl/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
 BuildRequires:	tcl-devel >= 8.6
@@ -72,11 +72,8 @@ install -d $RPM_BUILD_ROOT%{_libdir}
 	DESTDIR=$RPM_BUILD_ROOT
 
 %{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/libitcl* $RPM_BUILD_ROOT%{_libdir}
-chmod 755 $RPM_BUILD_ROOT%{_libdir}/libitcl*.so.0.*
-libfile=$(basename $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so.0.*)
-ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so.0
-ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl%{version}.so
-ln -sf $libfile $RPM_BUILD_ROOT%{_libdir}/libitcl.so
+chmod 755 $RPM_BUILD_ROOT%{_libdir}/libitcl*.so*
+ln -sf libitcl%{version}.so $RPM_BUILD_ROOT%{_libdir}/libitcl.so
 
 %{__mv} $RPM_BUILD_ROOT%{_ulibdir}/itcl%{version}/itclConfig.sh $RPM_BUILD_ROOT%{_ulibdir}
 %{__sed} -e 's#-L[^ ]* ##' \
@@ -101,8 +98,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc license.terms
-%attr(755,root,root) %{_libdir}/libitcl%{version}.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libitcl%{version}.so.0
+%attr(755,root,root) %{_libdir}/libitcl%{version}.so
 %dir %{_ulibdir}/itcl%{version}
 %{_ulibdir}/itcl%{version}/*.tcl
 %{_mandir}/mann/body.n*
@@ -119,7 +115,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libitcl%{version}.so
 %attr(755,root,root) %{_libdir}/libitcl.so
 %{_libdir}/libitclstub%{version}.a
 %{_ulibdir}/itclConfig.sh

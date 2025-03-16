@@ -1,32 +1,12 @@
---- itcl/Makefile.in.orig	2003-12-31 17:35:30.000000000 +0100
-+++ itcl/Makefile.in	2003-12-31 18:27:33.782467160 +0100
-@@ -55,7 +55,7 @@
- # library that we are building.
- #========================================================================
- 
--PKG_LIB_FILE	= @PKG_LIB_FILE@
-+PKG_LIB_FILE	= @PKG_LIB_FILE@.0.0
- PKG_STUB_LIB_FILE = @PKG_STUB_LIB_FILE@
- 
- lib_BINARIES	= $(PKG_LIB_FILE) $(PKG_STUB_LIB_FILE)
-@@ -230,8 +230,8 @@
+--- itcl4.2.3/Makefile.in.orig	2022-11-04 15:02:05.000000000 +0100
++++ itcl4.2.3/Makefile.in	2024-07-05 21:31:56.048730701 +0200
+@@ -290,8 +290,7 @@ genstubs: $(srcdir)/tools/genStubs.tcl $
  
  $(PKG_LIB_FILE): $(PKG_OBJECTS)
  	-rm -f $(PKG_LIB_FILE)
 -	${MAKE_LIB}
 -	$(RANLIB) $(PKG_LIB_FILE)
-+	${MAKE_LIB} -Wl,-soname,libitcl$(PACKAGE_VERSION).so.0
-+	-ln -sf $(PKG_LIB_FILE) libitcl$(PACKAGE_VERSION).so.0
++	${MAKE_LIB} -Wl,-soname,$(PKG_LIB_FILE)
  
  $(PKG_STUB_LIB_FILE): $(PKG_STUB_OBJECTS)
  	-rm -f $(PKG_STUB_LIB_FILE)
---- itcl4.0.4/pkgIndex.tcl.in.orig	2016-03-10 16:27:34.895380356 +0100
-+++ itcl4.0.4/pkgIndex.tcl.in	2016-03-10 16:28:42.282044195 +0100
-@@ -2,5 +2,5 @@
- 
- if {![package vsatisfies [package provide Tcl] 8.6]} {return}
- 
--package ifneeded itcl @PACKAGE_VERSION@ [list load [file join $dir "@PKG_LIB_FILE@"] itcl]
--package ifneeded Itcl @PACKAGE_VERSION@ [list load [file join $dir "@PKG_LIB_FILE@"] itcl]
-+package ifneeded itcl @PACKAGE_VERSION@ [list load "@libdir@/@PKG_LIB_FILE@.0" itcl]
-+package ifneeded Itcl @PACKAGE_VERSION@ [list load "@libdir@/@PKG_LIB_FILE@.0" itcl]
